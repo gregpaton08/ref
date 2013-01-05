@@ -13,6 +13,7 @@ struct node {
     struct node* next;
 };
 
+// sequentially prints the values of a linked list
 void print_linked_list(struct node *head) {
     struct node *temp = head;
     if (temp == 0)
@@ -24,6 +25,8 @@ void print_linked_list(struct node *head) {
     printf("\n");
 }
 
+// returns 10^n
+// returns 1 for negative values of n
 int power_10(int n) {
     int ret = 1;
     int i;
@@ -33,8 +36,10 @@ int power_10(int n) {
     return ret;
 }
 
+// returns a list from input integer val
 struct node *create_list_from_int(int val) {
     struct node *temp;
+    struct node *ret;
     int len = 1;
     int i = 1;
     
@@ -44,16 +49,24 @@ struct node *create_list_from_int(int val) {
         ++i;
     }
     
+    // create list
+    ret = (struct node *)malloc(sizeof(struct node));
+    temp = ret;
+    
     for (i = 1; i <= len; ++i) {
-        temp = (struct node *)malloc(sizeof(struct node));
         temp->value = val / power_10(len - i);
-        //val -= temp->value;
-        temp->next = 0;
+        val -= temp->value * power_10(len - i);
+        if (i != len) 
+            temp->next = (struct node*)malloc(sizeof(struct node));
+        else
+            temp->next = 0;
+        temp = temp->next;
     }
     
-    return temp;    
+    return ret;
 }
 
+// returns the intger vale of input list head
 int create_int_from_list(struct node *head) {
     int len = 1;
     int val = 0;
@@ -82,42 +95,19 @@ int create_int_from_list(struct node *head) {
     return val;    
 }
 
+// returns the integer value of two linked lists
 int add_linked_list(struct node *list1, struct node *list2) {
-    int len1 = 1;
-    int len2 = 1;
+    
     int val1 = 0;
     int val2 = 0;
-    int i;
-    struct node *temp;
 
     // check if arguments are valid
     if (list1 == 0 || list2 == 0)
         return 0;
-
-    // find lengths of lists
-    temp = list1;
-    while(temp->next != 0) {
-        ++len1;
-        temp = temp->next;
-    }
-    temp = list2;
-    while(temp->next != 0) {
-        ++len2;
-        temp = temp->next;
-    }
-
-    // find value of first list
-    temp = list1;
-    for (i = len1 - 1; i >= 0; --i) {
-        val1 += temp->value * power_10(i);
-        temp = temp->next;
-    }
-    // find value of second list
-    temp = list2;
-    for (i = len2 - 1; i >= 0; --i) {
-        val2 += temp->value * power_10(i);
-        temp = temp->next;
-    }
+    
+    // find values of lists
+    val1 = create_int_from_list(list1);
+    val2 = create_int_from_list(list2);
     
     // return sum
     return val1 + val2;
@@ -142,6 +132,7 @@ int main(int argc, char **argv) {
     print_linked_list(list2);
 
     val = add_linked_list(list1, list2);
+    printf("%d\n", val);
     temp = create_list_from_int(val);
     print_linked_list(temp);
 
