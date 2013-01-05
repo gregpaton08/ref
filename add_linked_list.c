@@ -54,6 +54,34 @@ struct node *create_list_from_int(int val) {
     return temp;    
 }
 
+int create_int_from_list(struct node *head) {
+    int len = 1;
+    int val = 0;
+    int i;
+    struct node *temp;
+    
+    // check if arguments are valid
+    if (head == 0)
+        return 0;
+    
+    // find length of list
+    temp = head;
+    while(temp->next != 0) {
+        ++len;
+        temp = temp->next;
+    }
+    
+    // find value of list
+    temp = head;
+    for (i = len - 1; i >= 0; --i) {
+        val += temp->value * power_10(i);
+        temp = temp->next;
+    }
+    
+    // return value
+    return val;    
+}
+
 int add_linked_list(struct node *list1, struct node *list2) {
     int len1 = 1;
     int len2 = 1;
@@ -114,7 +142,6 @@ int main(int argc, char **argv) {
     print_linked_list(list2);
 
     val = add_linked_list(list1, list2);
-    printf("%d\n", val);
     temp = create_list_from_int(val);
     print_linked_list(temp);
 
