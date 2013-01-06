@@ -8,8 +8,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// linked list node
+// value holds single digit of list
+// next points to the next noxe (0 if tail)
 struct node {
-    int value;
+    char value;
     struct node* next;
 };
 
